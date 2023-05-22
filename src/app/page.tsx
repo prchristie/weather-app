@@ -12,10 +12,10 @@ export default function Home() {
       <div className="flex w-1/3 justify-center bg-opacity-50">
         <div className="relative w-full">
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
               setCity("");
-              getWeather({ location: city }).then((w) => setWeather(w));
+              await getWeather({ location: city }).then((w) => setWeather(w));
             }}
           >
             <input
@@ -48,7 +48,7 @@ export default function Home() {
       {weather.weather && (
         <div className="flex gap-44">
           <div className="flex flex-col items-center justify-center gap-5 text-lg">
-            <Image src="/" width={20} height={20} alt="Hello" />
+            {/* <Image src="/" width={20} height={20} alt="Hello" /> */}
             {weather.weather[0].main}
           </div>
           <span className="text-9xl text-white">

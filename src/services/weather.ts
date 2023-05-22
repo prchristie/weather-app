@@ -6,8 +6,6 @@ export type WeatherInput = {
 };
 
 export const getWeather = async ({ location }: WeatherInput) => {
-  const res = await axios.get(
-    `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${WEATHER_API_KEY}&units=metric`
-  );
+  const res = await axios.get(`http://localhost:3000/api/weather/${location}`);
   return res.data;
 };
