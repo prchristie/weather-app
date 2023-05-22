@@ -5,7 +5,14 @@ export type WeatherInput = {
   location: string;
 };
 
-export const getWeather = async ({ location }: WeatherInput) => {
+export type Weather = {
+  weather: [{ main: string }];
+  main: { temp: number };
+};
+
+export const getWeather = async ({
+  location,
+}: WeatherInput): Promise<Weather> => {
   const res = await axios.get(`http://localhost:3000/api/weather/${location}`);
   return res.data;
 };

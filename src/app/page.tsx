@@ -1,11 +1,11 @@
 "use client";
 
-import { getWeather } from "@/services/weather";
+import { Weather, getWeather } from "@/services/weather";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 export default function Home() {
   const [city, setCity] = useState("");
-  const [weather, setWeather] = useState({});
+  const [weather, setWeather] = useState<Weather | undefined>(undefined);
 
   return (
     <main className="flex flex-col items-center justify-center gap-16 p-4 text-white">
@@ -45,7 +45,7 @@ export default function Home() {
         </div>
       </div>
 
-      {weather.weather && (
+      {weather && (
         <div className="flex gap-44">
           <div className="flex flex-col items-center justify-center gap-5 text-lg">
             {/* <Image src="/" width={20} height={20} alt="Hello" /> */}
