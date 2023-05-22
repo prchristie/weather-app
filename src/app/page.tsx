@@ -15,7 +15,8 @@ export default function Home() {
             onSubmit={async (e) => {
               e.preventDefault();
               setCity("");
-              await getWeather({ location: city }).then((w) => setWeather(w));
+              const w = await getWeather({ location: city });
+              setWeather(w);
             }}
           >
             <input

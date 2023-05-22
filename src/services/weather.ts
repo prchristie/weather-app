@@ -13,6 +13,6 @@ export type Weather = {
 export const getWeather = async ({
   location,
 }: WeatherInput): Promise<Weather> => {
-  const res = await axios.get(`http://localhost:3000/api/weather/${location}`);
+  const res = await axios.get(`/api/weather/${location}`);
   return res.data;
 };
