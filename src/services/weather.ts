@@ -7,7 +7,9 @@ export type WeatherInput = {
 
 export type Weather = {
   weather: [{ main: string }];
-  main: { temp: number };
+  main: { temp: number; feels_like: number; humidity: number };
+  wind: { speed: number };
+  name: string;
 };
 
 export const getWeather = async ({

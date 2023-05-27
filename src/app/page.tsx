@@ -1,62 +1,70 @@
 "use client";
 
+import InformationNugget from "@/components/InformationNugget";
+import LoadingAnimation from "@/components/LoadingAnimation";
+import SearchBar from "@/components/SearchBar";
+import WeatherDisplay from "@/components/WeatherDisplay";
 import { Weather, getWeather } from "@/services/weather";
 import Image from "next/image";
+import { FormEvent } from "react";
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export default function Home() {
-  const [city, setCity] = useState("");
   const [weather, setWeather] = useState<Weather | undefined>(undefined);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleCitySearch = async (content: string) => {
+    setWeather(undefined);
+    setLoading(true);
+    try {
+      const w = await getWeather({ location: content });
+      setWeather(w);
+    } catch (e) {
+      toast.error(`Couldn't find ${content}`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+    setLoading(false);
+  };
 
   return (
-    <main className="flex flex-col items-center justify-center gap-16 p-4 text-white">
-      <div className="flex w-1/3 justify-center bg-opacity-50">
-        <div className="relative w-full">
-          <form
-            onSubmit={async (e) => {
-              e.preventDefault();
-              setCity("");
-              const w = await getWeather({ location: city });
-              setWeather(w);
-            }}
-          >
-            <input
-              type="text"
-              placeholder="Search a city"
-              className="h-11 w-full rounded-xl border bg-transparent p-2 placeholder-white caret-white"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-            />
-            <button type="submit">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="absolute right-2 top-1/2 h-5 w-5 -translate-y-1/2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                />
-              </svg>
-            </button>
-          </form>
-        </div>
-      </div>
-
-      {weather && (
-        <div className="flex gap-44">
-          <div className="flex flex-col items-center justify-center gap-5 text-lg">
-            {/* <Image src="/" width={20} height={20} alt="Hello" /> */}
-            {weather.weather[0].main}
+    <main>
+      <ToastContainer />
+      <div className="flex flex-col items-center justify-center gap-16 p-4 text-white">
+        <div className="flex w-1/3 justify-center bg-opacity-50">
+          <div className="relative w-full">
+            <SearchBar onSubmit={handleCitySearch} isLoading={loading} />
           </div>
-          <span className="text-9xl text-white">
-            {Math.round(weather.main.temp)}°C
-          </span>
         </div>
-      )}
+        {weather && (
+          <>
+            <div className="mx-auto rounded-lg ">
+              <WeatherDisplay weather={weather} />
+            </div>
+            <div className="fixed bottom-0 mb-5 rounded-md bg-black bg-opacity-50 p-6">
+              <div className="flex flex-col justify-center gap-4">
+                <h2 className="text-center">Weather in {weather.name}</h2>
+                <div className="flex gap-20">
+                  <InformationNugget
+                    topLine={`${Math.round(weather.main.feels_like)}°`}
+                    bottomLine="Feels like"
+                  />
+                  <InformationNugget
+                    topLine={`${Math.round(weather.main.humidity)}%`}
+                    bottomLine="Humidity"
+                  />
+                  <InformationNugget
+                    topLine={`${Math.round(weather.wind.speed)} KPH`}
+                    bottomLine="Winds"
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </main>
   );
 }
