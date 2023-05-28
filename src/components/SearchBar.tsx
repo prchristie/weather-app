@@ -20,7 +20,7 @@ export default function SearchBar({
       <input
         type="text"
         placeholder="Search a city"
-        className="h-11 w-full rounded-xl border bg-transparent p-2 placeholder-white caret-white"
+        className="h-12 w-full rounded-xl border bg-black bg-opacity-40 p-2 placeholder-white caret-white"
         value={searchText}
         onChange={(e) => setSearchText(e.target.value)}
       />
